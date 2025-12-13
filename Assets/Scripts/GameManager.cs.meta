@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 34fc376d2493fb844b729eeb13f47dd2
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - _enemyPrefab: {fileID: 3598434469278657714, guid: 64bd5ff848a44b44da4673d3b8bd9f38, type: 3}
+  - _assassinPrefab: {fileID: 6624344618496022313, guid: aa99cf0fcb8888343bcfdec943508536, type: 3}
+  - _neighbourPrefab: {fileID: 4548947733109358862, guid: f8840ac2748b79040a084895a814f0a2, type: 3}
+  - _mountainPrefab: {fileID: 3275463312263840103, guid: 31bd9526ba408db488c849725a196268, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
