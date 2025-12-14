@@ -6,6 +6,7 @@ public class GameManager : MonoBehaviour
     public bool _gameOver = false;
     public int _score = 0;
     public int _enemyCount = 0;
+    private int _closedForestPathCount = 0;
     public string _travelAxis;
     public int _travelDirection = -1;
     [SerializeField] 
@@ -18,6 +19,8 @@ public class GameManager : MonoBehaviour
     private GameObject _mountainPrefab;
     [SerializeField] 
     private GameObject _forestTriggerPrefab;
+    [SerializeField] 
+    private GameObject _levelChangeTriggerPrefab;
     private GameObject _currentOpponent;
     private UIManager _uiManager;
     private string _opponentType;
@@ -207,6 +210,9 @@ public class GameManager : MonoBehaviour
 
         _spawnPos = new Vector3(-3f, 5f, 0.07f);
         Instantiate(_forestTriggerPrefab, _spawnPos, Quaternion.Euler(90f, 0f, 0f));
+
+        _spawnPos = new Vector3(0f, 6f, 0.06f);
+        Instantiate(_levelChangeTriggerPrefab, _spawnPos, Quaternion.Euler(90f, 0f, 0f)); // Level Change Trigger
 
         _spawnPos = new Vector3(3f, 5f, 0.07f);
         Instantiate(_forestTriggerPrefab, _spawnPos, Quaternion.Euler(90f, 0f, 0f));
@@ -572,6 +578,8 @@ public class GameManager : MonoBehaviour
     {
         //Debug.Log("CloseForestPath()");
         // N O R T H E R N   B O R D E R
+        _closedForestPathCount++;
+        
         if (positionX == 9.0f && positionY >= 5.0f)
         {
             _pathNorth_E9_N7.SetActive(true);
@@ -634,6 +642,12 @@ public class GameManager : MonoBehaviour
             _pathWest_W9_S4.SetActive(true);    
             //_spawnPointBlocked_W9_S4 = true;
         }
+    }
+
+    public int GetClosedForestPathCount()
+    {
+        //Debug.Log("GameManager.ClosedForestPathCount()");
+        return _closedForestPathCount;
     }
 
     public void EndGame()
