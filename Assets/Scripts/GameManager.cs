@@ -320,6 +320,12 @@ public class GameManager : MonoBehaviour
             //SceneManager.LoadScene("Game");            
             SceneManager.LoadScene("MainMenu");            
         }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            //Quit application if Escape key is pressed            
+            Application.Quit();            
+        }
     }
 
     void SpawnEnemy()
