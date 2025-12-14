@@ -53,8 +53,6 @@ public class Enemy : MonoBehaviour
     private void CalculateMovement()
     {
         // Move Enemy along Y axis at a constant speed
-        //transform.Translate(Vector3.up * _speed * Time.deltaTime);
-        //float _travelSpeed = _speed * _gameManager._travelDirection;
         float _travelSpeed = _speed * _localTravelDirection;
         int _newDirection = 0;
         float _min = 0f;
@@ -62,7 +60,6 @@ public class Enemy : MonoBehaviour
         float _clampedX = 0f;
         float _clampedY = 0f;
 
-        //if (_gameManager._travelAxis == "Y-Axis" && !_passingJunction)
         if (_localTravelAxis == "Y-Axis" && !_passingJunction)
         {
             //Debug.Log("travelY-AXIS ----------------------------------------------------------------- Y-AXIS");
@@ -93,14 +90,13 @@ public class Enemy : MonoBehaviour
                     if (Random.Range(0, 2) == 1)                   
                     {
                         // Encountered a junction on y-Axis and switching to travel on x-Axis
-                        //_gameManager.SwitchTravelAxis();
                         SwitchLocalTravelAxis();
                         // Check current X path and decide on travel direction - left/right
-                        if (transform.position.x == -9f)
+                        if (transform.position.x <= -9f)
                         {
                             _newDirection = 1; // travel right
                         }
-                        else if (transform.position.x == 9f)
+                        else if (transform.position.x >= 9f)
                         {
                             _newDirection = -1; // travel left
                         }
@@ -124,13 +120,12 @@ public class Enemy : MonoBehaviour
             if (_newDirection != 0)
             {
                 // direction has changed - update _travelDirection
-                //_gameManager.SetTravelDirection(_newDirection);
                 SetLocalTravelDirection(_newDirection);
                 // Set Y axis value to Y junction value to be exactly on the Y path
                 Vector3 _position = transform.position;
                 _position.y = _clampedY;
                 transform.position = _position;
-                Debug.Log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Setting psotition: X:" + _position.x + " / Y:"  + _position.y);
+                
                 // prevent evaluation of junction on next iteration as value may still be in range
                 _passingJunction = true; 
             }
@@ -142,13 +137,10 @@ public class Enemy : MonoBehaviour
                 //if ((transform.position.y < -4 && _gameManager._travelDirection < 0) || (transform.position.y > 6 && _gameManager._travelDirection > 0))
                 if ((transform.position.y < -4 && _localTravelDirection < 0) || (transform.position.y > 6 && _localTravelDirection > 0))                {
                     // Reverse direction
-                    //_gameManager._travelDirection = _gameManager._travelDirection * -1;
-                    //_localTravelDirection = _localTravelDirection * -1;
                     SwitchLocalTravelDirection();
                 }                
             }
         }
-        //else if (_gameManager._travelAxis == "X-Axis" && !_passingJunction)
         else if (_localTravelAxis == "X-Axis" && !_passingJunction)
         {
             //Debug.Log("travelX-AXIS ----------------------------------------------------------------- X-AXIS");
@@ -178,7 +170,6 @@ public class Enemy : MonoBehaviour
                     if (Random.Range(0, 2) == 1)
                     {
                         // Encountered a junction on x-Axis and switching to travel on y-Axis
-                        //_gameManager.SwitchTravelAxis();
                         SwitchLocalTravelAxis();
                         // Check current Y path and decide on travel direction - up/down
                         if (transform.position.y == -4)
@@ -216,7 +207,7 @@ public class Enemy : MonoBehaviour
                 Vector3 _position = transform.position;
                 _position.x = _clampedX;
                 transform.position = _position;
-                Debug.Log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Setting psotition: X:" + _position.x + " / Y:"  + _position.y);
+                //Debug.Log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Setting psotition: X:" + _position.x + " / Y:"  + _position.y);
                 
                 // prevent evaluation of junction on next iteration as value may still be in range
                 _passingJunction = true; 
@@ -230,39 +221,29 @@ public class Enemy : MonoBehaviour
                 if ((transform.position.x < -9 && _localTravelDirection > 0) || (transform.position.x > 9 && _localTravelDirection < 0))
                 {
                     // Reverse direction
-                    //_gameManager._travelDirection = _gameManager._travelDirection * -1;
-                    //_localTravelDirection = _localTravelDirection * -1;
                     SwitchLocalTravelDirection();
                 }
             }
-        //} else if (_gameManager._travelAxis == "Y-Axis" && _passingJunction)
         } else if (_localTravelAxis == "Y-Axis" && _passingJunction)
         {
             _passingJunction = false;
             // direction has not changed - continue of y axis.
             transform.Translate(Vector3.up * _travelSpeed * Time.deltaTime);
 
-            //if ((transform.position.y < -4 && _gameManager._travelDirection < 0) || (transform.position.y > 6 && _gameManager._travelDirection > 0))
             if ((transform.position.y < -4 && _localTravelDirection < 0) || (transform.position.y > 6 && _localTravelDirection > 0))
             {
                 // Reverse direction
-                //_gameManager._travelDirection = _gameManager._travelDirection * -1;
-                //_localTravelDirection = _localTravelDirection * -1;
                 SwitchLocalTravelDirection();
             }                
-        //} else if (_gameManager._travelAxis == "X-Axis" && _passingJunction)
         } else if (_localTravelAxis == "X-Axis" && _passingJunction)
         {
             _passingJunction = false;
             // direction has not changed - continue on x axis.
             transform.Translate(Vector3.left * _travelSpeed * Time.deltaTime);
     
-            //if ((transform.position.x < -9 && _gameManager._travelDirection > 0) || (transform.position.x > 9 && _gameManager._travelDirection < 0))
             if ((transform.position.x < -9 && _localTravelDirection > 0) || (transform.position.x > 9 && _localTravelDirection < 0))
             {
                 // Reverse direction
-                //_gameManager._travelDirection = _gameManager._travelDirection * -1;
-                //_localTravelDirection = _localTravelDirection * -1;
                 SwitchLocalTravelDirection();
             }
             _passingJunction = false;
@@ -284,7 +265,7 @@ public class Enemy : MonoBehaviour
     }
     public void SwitchLocalTravelAxis()
     {
-        Debug.Log("SwitchLocalTravelAxis");
+        //Debug.Log("SwitchLocalTravelAxis");
         // Respawn after 2 - 5 seconds
         if(_localTravelAxis == "X-Axis")
         {
@@ -298,12 +279,12 @@ public class Enemy : MonoBehaviour
 
     public void SetLocalTravelDirection(int newDirection)
     {
-        Debug.Log("SetlocalTravelDirection");
+        //Debug.Log("SetlocalTravelDirection");
         _localTravelDirection = newDirection;
     }
     public void SwitchLocalTravelDirection()
     {
-        Debug.Log("SwitchlocalTravelDirection");
+        //Debug.Log("SwitchlocalTravelDirection");
         _localTravelDirection = _localTravelDirection * -1;
     }
 

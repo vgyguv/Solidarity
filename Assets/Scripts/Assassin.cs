@@ -24,7 +24,6 @@ public class Assassin : MonoBehaviour
     {
         _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         _player = GameObject.Find("Player").GetComponent<Player>();
-        //gameManager = FindObjectOfType<GameManager>();
     }
 
     // Update is called once per frame
@@ -75,13 +74,23 @@ public class Assassin : MonoBehaviour
             // Assassin currently travelling on X axis and is on same Y axis as Player
             // Just check that X axis travel is correct in relation to Player.
 
-            if (transform.position.x < _playerX && _localTravelDirection < 0)
+            //Debug.Log("travelX-AXIS ????????????????????????????????????? " + transform.position.x + " " + _playerX + " " + _localTravelDirection +
+            //          " -- speed:" + _speed + " travel_speed:" + _travelSpeed);
+
+            if ((transform.position.x < _playerX && _localTravelDirection < 0) || (transform.position.x > _playerX && _localTravelDirection > 0))
             {
                 _localTravelDirection = -1;
                 _travelSpeed = _speed * _localTravelDirection;
             }
 
-            transform.Translate(Vector3.left * _travelSpeed * Time.deltaTime);    
+            if (transform.position.x > _playerX)
+            {
+                transform.Translate(Vector3.right * _travelSpeed * Time.deltaTime);                    
+            }
+            else
+            {
+                transform.Translate(Vector3.left * _travelSpeed * Time.deltaTime);                    
+            }
         }
         else if (_localTravelAxis == "Y-Axis" && transform.position.x == _playerX)
         {
@@ -98,7 +107,6 @@ public class Assassin : MonoBehaviour
         }
         else if (_localTravelAxis == "Y-Axis" && !_passingJunction)
         {
-            Debug.Log("travelY-AXIS --------------------------------------- TRAVELLING ON -------------------------- Y-AXIS");
             // TRAVELLING ON Y-AXIS
             // Check if crossing a path junction with the x axis
             _newDirection = 0;
@@ -118,12 +126,10 @@ public class Assassin : MonoBehaviour
             for (int i = 0; i < _yJunctionPoints.Length; i++)
             {
                 _clampedY = Mathf.Clamp(_yJunctionPoints[i], _min, _max);
-                Debug.Log("_min" + _min + " _max " + _max + " _clampedY " + _clampedY);
+                //Debug.Log("_min" + _min + " _max " + _max + " _clampedY " + _clampedY);
 
                 if (_clampedY == _yJunctionPoints[i])
                 {
-                    Debug.Log("Got MATCH >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> MATVH (clampedY) - Y " + _clampedY);
-                    Debug.Log("CHECKING >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> playerX - Y" + _playerY);
                     if (_clampedY == _playerY)
                     {
                         // Player position is matching on y axis
@@ -140,13 +146,11 @@ public class Assassin : MonoBehaviour
             if (_newDirection != 0)
             {
                 // direction has changed - update _travelDirection
-                //_gameManager.SetTravelDirection(_newDirection);
                 SetLocalTravelDirection(_newDirection);
                 // Set Y axis value to Y junction value to be exactly on the Y path
                 Vector3 _position = transform.position;
                 _position.y = _clampedY;
                 transform.position = _position;
-                Debug.Log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Setting psotition: X:" + _position.x + " / Y:"  + _position.y + " DIR:" + _newDirection);
                 // prevent evaluation of junction on next iteration as value may still be in range
                 _passingJunction = true; 
             }
@@ -155,20 +159,14 @@ public class Assassin : MonoBehaviour
                 // direction has not changed - continue of y axis.
                 transform.Translate(Vector3.up * _travelSpeed * Time.deltaTime);
 
-                //if ((transform.position.y < -4 && _gameManager._travelDirection < 0) || (transform.position.y > 6 && _gameManager._travelDirection > 0))
                 if ((transform.position.y < -4 && _localTravelDirection < 0) || (transform.position.y > 6 && _localTravelDirection > 0))                {
                     // Reverse direction
-                    //_gameManager._travelDirection = _gameManager._travelDirection * -1;
-                    //_localTravelDirection = _localTravelDirection * -1;
                     SwitchLocalTravelDirection();
                 }  
-                Debug.Log(">>>>>>>>>>>>>>>>>>>>>>>>>>>> Direction NOT Chnaged >>>>>>>>>>>>>>>>>>>>>>> Y " + transform.position.y);              
             }
         }
-        //else if (_gameManager._travelAxis == "X-Axis" && !_passingJunction)
         else if (_localTravelAxis == "X-Axis" && !_passingJunction)
         {
-            Debug.Log("travelX-AXIS --------------------------------------- TRAVELLING ON -------------------------- X-AXIS");
             // TRAVELLING ON X-AXIS
             // Check if crossing a path junction with the y axis
             _newDirection = 0;
@@ -191,8 +189,6 @@ public class Assassin : MonoBehaviour
             
                 if (_clampedX == _xJunctionPoints[i])
                 {
-                    Debug.Log("Got MATCH >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> MATCH (clampedX) X " + _clampedX);
-                    Debug.Log("CHECKING >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> playerX - X" + _playerX);
                     if (_clampedX == _playerX)
                     {
                         // Player position is matching on x axis
@@ -209,14 +205,13 @@ public class Assassin : MonoBehaviour
             if (_newDirection != 0)
             {
                 // direction has changed - update _travelDirection
-                //_gameManager.SetTravelDirection(_newDirection);
                 SetLocalTravelDirection(_newDirection);
 
                 // Set X axis value to X junction value to be exactly on the X path 
                 Vector3 _position = transform.position;
                 _position.x = _clampedX;
                 transform.position = _position;
-                Debug.Log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Setting psotition: X:" + _position.x + " / Y:"  + _position.y + " DIR:" + _newDirection);
+                //Debug.Log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Setting psotition: X:" + _position.x + " / Y:"  + _position.y + " DIR:" + _newDirection);
                 
                 // prevent evaluation of junction on next iteration as value may still be in range
                 _passingJunction = true; 
@@ -226,44 +221,34 @@ public class Assassin : MonoBehaviour
                 // direction has not changed - continue on x axis.
                 transform.Translate(Vector3.left * _travelSpeed * Time.deltaTime);
         
-                //if ((transform.position.x < -9 && _gameManager._travelDirection > 0) || (transform.position.x > 9 && _gameManager._travelDirection < 0))
                 if ((transform.position.x < -9 && _localTravelDirection > 0) || (transform.position.x > 9 && _localTravelDirection < 0))
                 {
                     // Reverse direction
-                    //_gameManager._travelDirection = _gameManager._travelDirection * -1;
-                    //_localTravelDirection = _localTravelDirection * -1;
                     SwitchLocalTravelDirection();
                 }
-                Debug.Log(">>>>>>>>>>>>>>>>>>>>>>>>>>>> Direction NOT Chnaged >>>>>>>>>>>>>>>>>>>>>>> X " + transform.position.x);              
             }
-        //} else if (_gameManager._travelAxis == "Y-Axis" && _passingJunction)
-        } else if (_localTravelAxis == "Y-Axis" && _passingJunction)
+        } 
+        else if (_localTravelAxis == "Y-Axis" && _passingJunction)
         {
             _passingJunction = false;
             // direction has not changed - continue of y axis.
             transform.Translate(Vector3.up * _travelSpeed * Time.deltaTime);
 
-            //if ((transform.position.y < -4 && _gameManager._travelDirection < 0) || (transform.position.y > 6 && _gameManager._travelDirection > 0))
             if ((transform.position.y < -4 && _localTravelDirection < 0) || (transform.position.y > 6 && _localTravelDirection > 0))
             {
                 // Reverse direction
-                //_gameManager._travelDirection = _gameManager._travelDirection * -1;
-                //_localTravelDirection = _localTravelDirection * -1;
                 SwitchLocalTravelDirection();
             }                
-        //} else if (_gameManager._travelAxis == "X-Axis" && _passingJunction)
-        } else if (_localTravelAxis == "X-Axis" && _passingJunction)
+        } 
+        else if (_localTravelAxis == "X-Axis" && _passingJunction)
         {
             _passingJunction = false;
             // direction has not changed - continue on x axis.
             transform.Translate(Vector3.left * _travelSpeed * Time.deltaTime);
     
-            //if ((transform.position.x < -9 && _gameManager._travelDirection > 0) || (transform.position.x > 9 && _gameManager._travelDirection < 0))
             if ((transform.position.x < -9 && _localTravelDirection > 0) || (transform.position.x > 9 && _localTravelDirection < 0))
             {
                 // Reverse direction
-                //_gameManager._travelDirection = _gameManager._travelDirection * -1;
-                //_localTravelDirection = _localTravelDirection * -1;
                 SwitchLocalTravelDirection();
             }
             _passingJunction = false;
@@ -272,18 +257,17 @@ public class Assassin : MonoBehaviour
 
     private void DeterminePlayerPosition()
     {
-        Debug.Log("DeterminePlayerPosition >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        //Debug.Log("DeterminePlayerPosition >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         // Round the Player x and y positions to integers and convert back to float values.
         _positionRounded = Mathf.RoundToInt(_player.transform.position.x);
         _playerX = _positionRounded;
         _positionRounded = Mathf.RoundToInt(_player.transform.position.y);
         _playerY = _positionRounded;
-        Debug.Log("PLAYER X:" + _playerX + " Y:" + _playerY);
     }
 
     private void ChasePlayerOnXAxis()
     {
-        Debug.Log("ChasePlayerOnXAxis >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        //Debug.Log("ChasePlayerOnXAxis >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         // Encountered a junction on y-Axis and switching to travel on same x-Axis as Player
         SwitchLocalTravelAxis();
 
@@ -295,12 +279,11 @@ public class Assassin : MonoBehaviour
         {
             _newDirection = 1; // travel left
         }
-        Debug.Log("Assassin X " + transform.position.x + " Player X " + _playerX + " Direction " + _newDirection);
     }
 
     private void ChasePlayerOnYAxis()
     {
-        Debug.Log("ChasePlayerOnYAxis >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        //Debug.Log("ChasePlayerOnYAxis >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         // Encountered a junction on x-Axis and switching to travel on same y-Axis as Player
         SwitchLocalTravelAxis();
 
@@ -312,12 +295,11 @@ public class Assassin : MonoBehaviour
         {
             _newDirection = -1; // travel down
         }
-        Debug.Log("Assassin Y " + transform.position.y + " Player Y " + _playerY + " Direction " + _newDirection);
     }
 
     private void RandomXAxisDecision()
     {
-        Debug.Log("RandomXAxisDecision >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        //Debug.Log("RandomXAxisDecision >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         
         if (Random.Range(0, 2) == 1)                   
         {
@@ -349,7 +331,7 @@ public class Assassin : MonoBehaviour
 
     private void RandomYAxisDecision()
     {
-        Debug.Log("RandomYAxisDecision >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        //Debug.Log("RandomYAxisDecision >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         
         if (Random.Range(0, 2) == 1)
         {
@@ -388,7 +370,7 @@ public class Assassin : MonoBehaviour
 
     public void SwitchLocalTravelAxis()
     {
-        Debug.Log("SwitchLocalTravelAxis");
+        //Debug.Log("SwitchLocalTravelAxis");
         // Respawn after 2 - 5 seconds
         if(_localTravelAxis == "X-Axis")
         {
@@ -402,12 +384,12 @@ public class Assassin : MonoBehaviour
 
     public void SetLocalTravelDirection(int newDirection)
     {
-        Debug.Log("SetlocalTravelDirection");
+        //Debug.Log("SetlocalTravelDirection");
         _localTravelDirection = newDirection;
     }
     public void SwitchLocalTravelDirection()
     {
-        Debug.Log("SwitchlocalTravelDirection");
+        //Debug.Log("SwitchlocalTravelDirection");
         _localTravelDirection = _localTravelDirection * -1;
     }
 }

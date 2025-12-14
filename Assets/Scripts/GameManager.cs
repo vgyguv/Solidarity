@@ -52,7 +52,7 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        Debug.Log("GameManager.Start >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        //Debug.Log("GameManager.Start >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         Vector3 _spawnPos;
         _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
 
@@ -306,7 +306,7 @@ public class GameManager : MonoBehaviour
         Invoke(nameof(SpawnEnemy), Random.Range(5f, 10f));
         // Spawn secoond enemy after 150 - 200 seconds 
         Invoke(nameof(SpawnEnemy), Random.Range(150f, 200f));
-        // Spawn secoond enemy after 420 - 450 seconds 
+        // Spawn secoond enemy after 600 - 720 seconds 
         Invoke(nameof(SpawnEnemy), Random.Range(420f, 450f));
 
         // Spawn assassin after 210 seconds
@@ -325,22 +325,19 @@ public class GameManager : MonoBehaviour
     void SpawnEnemy()
     {
         _opponentType = "Enemy";
-        Debug.Log("SpawnEnemy >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> " + _opponentType);
+        //Debug.Log("SpawnEnemy >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> " + _opponentType);
         SpawnOpponent();
     }
 
     void SpawnAssassin()
     {
         _opponentType = "Assassin";
-        Debug.Log("SpawnAssassin >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> " + _opponentType);
+        //Debug.Log("SpawnAssassin >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> " + _opponentType);
         SpawnOpponent();
     }
 
     void SpawnOpponent()
     {
-        Debug.Log("SpawnOpponent >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> SPAWN >>>>>>>>>>>>>>>> " + _opponentType);
-        Debug.Log("SpawnOpponent >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> SPAWN >>>>>>>>>>>>>>>> " + _opponentType);
-        Debug.Log("SpawnOpponent >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> SPAWN >>>>>>>>>>>>>>>> " + _opponentType);
         if (!_gameOver)
         {
             int _x;
@@ -350,15 +347,15 @@ public class GameManager : MonoBehaviour
             // Decision: 0 - fixed x axis and random y axis 
             // Decision: 1 - random x axis, and fixed y axis, 
 
-            if (_randomDecision == 1)
+            if (_randomDecision == 1 || _opponentType == "Assassin")
             {
-                Debug.Log("random XXXXXX: " + _randomDecision);
+
                 _travelAxis = "Y-Axis"; // move along y axis
                 _travelDirection = -1; // Enemy travels down
                 _x = Random.Range(-3, 3) * 3;
                 _y = 7;
                 bool _blockedSpawnPoint = CheckSpawnPoint(_x, _y);
-                Debug.Log("vvvvvvvvvvvvvvvvvvvvvvvv blockedSpawnPoint: " + _blockedSpawnPoint);
+
                 if (_blockedSpawnPoint)
                 {
                     // Default to central path on northern border
@@ -367,9 +364,9 @@ public class GameManager : MonoBehaviour
             } 
             else
             {
-                Debug.Log("random YYYYYYYYYY: " + _randomDecision);
+
                 _travelAxis = "X-Axis"; // move along x axis
-                //_y = Random.Range(-4, 3);
+
                 _y = Random.Range(-1, 1) * 3 -1;
 
                 _randomDecision = Random.Range(0, 2);
@@ -378,18 +375,16 @@ public class GameManager : MonoBehaviour
 
                 if (_randomDecision == 1)
                 {
-                    Debug.Log("random X LEFT: " + _randomDecision);
                     _x = -10;
                     _travelDirection = 1; // Enemy travels to the right
                 }
                 else
                 {
-                    Debug.Log("random X RIGHT: " + _randomDecision);
                     _x = 10;
                     _travelDirection = -1; // Enemy travels to the left
                 }
                 bool _blockedSpawnPoint = CheckSpawnPoint(_x, _y);
-                Debug.Log("vvvvvvvvvvvvvvvvvvvvvvvv blockedSpawnPoint: " + _blockedSpawnPoint);
+
                 if (_blockedSpawnPoint)
                 {
                     // Default to central path on northern border
@@ -399,11 +394,11 @@ public class GameManager : MonoBehaviour
                     _y = 7;
                 }
             }
-
+        
             Vector3 spawnPos = new Vector3(_x, _y, 0);
             if (_opponentType == "Enemy")
             {
-                Debug.Log("E N E M Y !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1");
+                //Debug.Log("E N E M Y !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1");
                 // Spawn enemy
                 _currentOpponent = Instantiate(_enemyPrefab, spawnPos, Quaternion.identity);
                 UpdateEnemyCount(1);               
@@ -412,7 +407,7 @@ public class GameManager : MonoBehaviour
             }
             else
             {
-                Debug.Log("A S S A S S I N !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1!");
+                //Debug.Log("A S S A S S I N !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1!");
                 // Spawn assassin
                 _currentOpponent = Instantiate(_assassinPrefab, spawnPos, Quaternion.identity);
                 // Set the _travelAxis and _travelDirection locally in the assassin gameObject
@@ -424,14 +419,14 @@ public class GameManager : MonoBehaviour
     
     public void OnEnemyDestroyed()
     {
-        Debug.Log("OnEnemyDestroyed fired");
+        //Debug.Log("OnEnemyDestroyed fired");
         // Respawn after 2 - 5 seconds
         Invoke(nameof(SpawnEnemy), Random.Range(2f, 5f));
     }
 
     public void OnAssassinDestroyed()
     {
-        Debug.Log("OnAssassinDestroyed fired");
+        //Debug.Log("OnAssassinDestroyed fired");
         // Respawn after 2 minutes
         Invoke(nameof(SpawnAssassin), 10f);
     }
@@ -449,8 +444,8 @@ public class GameManager : MonoBehaviour
 
     public bool CheckSpawnPoint(float positionX, float positionY)
     {
-        Debug.Log("gameManager::CheckSpawnPoint(" + positionX + ", " + positionY + ") HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
-        // N O R T H E R N   B O R D E R7
+        //Debug.Log("gameManager::CheckSpawnPoint(" + positionX + ", " + positionY + ") HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
+        // N O R T H E R N   B O R D E R
         if (positionX == 9.0f && positionY == 7.0f)
         {
             return _pathNorth_E9_N7.activeInHierarchy;
@@ -509,55 +504,55 @@ public class GameManager : MonoBehaviour
 
     public bool CheckForestPathClosed(float positionX, float positionY)
     {
-        Debug.Log("gameManager::CheckForestPathOpen(" + positionX + ", " + positionY + ") HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
+        //Debug.Log("gameManager::CheckForestPathOpen(" + positionX + ", " + positionY + ") HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
         // N O R T H E R N   B O R D E R
-        if (positionX == 9.0f && positionY == 5.0f)
+        if (positionX == 9.0f && positionY >= 5.0f)
         {
             return _pathNorth_E9_N7.activeInHierarchy;
         } 
-        else if (positionX == 6.0f && positionY == 5.0f)
+        else if (positionX == 6.0f && positionY >= 5.0f)
         {
             return _pathNorth_E6_N7.activeInHierarchy;
         }
-        else if (positionX == 3.0f && positionY == 5.0f)
+        else if (positionX == 3.0f && positionY >= 5.0f)
         {
             return _pathNorth_E3_N7.activeInHierarchy;
         }
-        if (positionX == -3.0f && positionY == 5.0f)
+        if (positionX == -3.0f && positionY >= 5.0f)
         {
             return _pathNorth_W3_N7.activeInHierarchy;
         } 
-        else if (positionX == -6.0f && positionY == 5.0f)
+        else if (positionX == -6.0f && positionY >= 5.0f)
         {
             return _pathNorth_W6_N7.activeInHierarchy;
         }
-        else if (positionX == -9.0f && positionY == 5.0f)
+        else if (positionX == -9.0f && positionY >= 5.0f)
         {
             return _pathNorth_W9_N7.activeInHierarchy;
         }
         // EASTERN BORDER (Positive X)
-        else if (positionX == 9.0f && positionY == 2.0f)
+        else if (positionX >= 9.0f && positionY == 2.0f)
         {
             return _pathEast_E9_N2.activeInHierarchy;
         }
-        else if (positionX == 9.0f && positionY == -1.0f)
+        else if (positionX >= 9.0f && positionY == -1.0f)
         {
             return _pathEast_E9_S1.activeInHierarchy;
         }
-        else if (positionX == 9.0f && positionY == -4.0f)
+        else if (positionX >= 9.0f && positionY == -4.0f)
         {
             return _pathEast_E9_S4.activeInHierarchy;
         }
         // WESTERN BORDER (Negative X)
-        else if (positionX == -9.0f && positionY == 2.0f)
+        else if (positionX <= -9.0f && positionY == 2.0f)
         {
             return _pathWest_W9_N2.activeInHierarchy;
         }
-        else if (positionX == -9.0f && positionY == -1.0f)
+        else if (positionX <= -9.0f && positionY == -1.0f)
         {
             return _pathWest_W9_S1.activeInHierarchy;
         }
-        else if (positionX == -9.0f && positionY == -4.0f)
+        else if (positionX <= -9.0f && positionY == -4.0f)
         {
             return _pathWest_W9_S4.activeInHierarchy;
         }
@@ -569,66 +564,66 @@ public class GameManager : MonoBehaviour
 
     public void CloseForestPath(float positionX, float positionY)
     {
-        Debug.Log("CloseForestPath()");
+        //Debug.Log("CloseForestPath()");
         // N O R T H E R N   B O R D E R
-        if (positionX == 9.0f && positionY == 5.0f)
+        if (positionX == 9.0f && positionY >= 5.0f)
         {
             _pathNorth_E9_N7.SetActive(true);
             //_spawnPointBlocked_E9_N7 = true;
         } 
-        else if (positionX == 6.0f && positionY == 5.0f)
+        else if (positionX == 6.0f && positionY >= 5.0f)
         {
             _pathNorth_E6_N7.SetActive(true);
             //_spawnPointBlocked_E6_N7 = true;
         }
-        else if (positionX == 3.0f && positionY == 5.0f)
+        else if (positionX == 3.0f && positionY >= 5.0f)
         {
             _pathNorth_E3_N7.SetActive(true);
             //_spawnPointBlocked_E3_N7 = true;
         }
-        if (positionX == -3.0f && positionY == 5.0f)
+        if (positionX == -3.0f && positionY >= 5.0f)
         {
             _pathNorth_W3_N7.SetActive(true);
             //_spawnPointBlocked_W3_N7 = true;
         } 
-        else if (positionX == -6.0f && positionY == 5.0f)
+        else if (positionX == -6.0f && positionY >= 5.0f)
         {
             _pathNorth_W6_N7.SetActive(true);
             //_spawnPointBlocked_W6_N7 = true;
         }
-        else if (positionX == -9.0f && positionY == 5.0f)
+        else if (positionX == -9.0f && positionY >= 5.0f)
         {
             _pathNorth_W9_N7.SetActive(true);
             //_spawnPointBlocked_W9_N7 = true;
         }
         // EASTERN BORDER (Positive X)
-        else if (positionX == 9.0f && positionY == 2.0f)
+        else if (positionX >= 9.0f && positionY == 2.0f)
         {
             _pathEast_E9_N2.SetActive(true);
             //_spawnPointBlocked_E9_N2 = true;
         }
-        else if (positionX == 9.0f && positionY == -1.0f)
+        else if (positionX >= 9.0f && positionY == -1.0f)
         {
             _pathEast_E9_S1.SetActive(true);
             //_spawnPointBlocked_E9_S1 = true;
         }
-        else if (positionX == 9.0f && positionY == -4.0f)
+        else if (positionX >= 9.0f && positionY == -4.0f)
         {
             _pathEast_E9_S4.SetActive(true);
             //_spawnPointBlocked_E9_S4 = true;
         }
         // WESTERN BORDER (Negative X)
-        else if (positionX == -9.0f && positionY == 2.0f)
+        else if (positionX <= -9.0f && positionY == 2.0f)
         {
             _pathWest_W9_N2.SetActive(true);
             //_spawnPointBlocked_W9_N2 = true;
         }
-        else if (positionX == -9.0f && positionY == -1.0f)
+        else if (positionX <= -9.0f && positionY == -1.0f)
         {
             _pathWest_W9_S1.SetActive(true);
             //_spawnPointBlocked_W9_S1 = true;        
         }
-        else if (positionX == -9.0f && positionY == -4.0f)
+        else if (positionX <= -9.0f && positionY == -4.0f)
         {
             _pathWest_W9_S4.SetActive(true);    
             //_spawnPointBlocked_W9_S4 = true;
@@ -637,10 +632,10 @@ public class GameManager : MonoBehaviour
 
     public void EndGame()
     {
-        Debug.Log("GameManager.EndGame()");
+        //Debug.Log("GameManager.EndGame()");
         _gameOver = true;
         _uiManager.ShowGameOver();
-        Debug.Log("Game Over!");
+        //Debug.Log("Game Over!");
         // Stop spawning opponents
         CancelInvoke();
     }

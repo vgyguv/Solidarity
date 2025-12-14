@@ -34,25 +34,28 @@ public class ForestTrigger : MonoBehaviour
 
             _timeOnForestTrigger += Time.deltaTime;
             bool _forestPathClosed = _gameManager.CheckForestPathClosed(transform.position.x, transform.position.y);    
-            if (_timeOnForestTrigger >= _initialActivationTime && !_forestPathClosed)
+            if (_timeOnForestTrigger >= _initialActivationTime && !_forestPathClosed && _playerScript.GetEnergyLevel() > (_energyCost * -1))
             {
-                Debug.Log("IIIIIIIIIIIIIIII Inside first condition");
                 float _pulse = Mathf.PingPong(Time.time * 2f, 1f); 
                 _forestTriggerRenderer.material.color = Color.Lerp(Color.white, Color.green, _pulse);
 
                 if (_timeOnForestTrigger >= _forestClosureTime)
                 {
-                    Debug.Log("IIIIIIIIIIIIIIII Inside second condition");
                     _gameManager.CloseForestPath(transform.position.x, transform.position.y);
                     _playerScript.UpdateEnergyLevel(_energyCost);            
                 }
+            }
+            else if (_timeOnForestTrigger >= _initialActivationTime && !_forestPathClosed && _playerScript.GetEnergyLevel() <= (_energyCost * -1))
+            {
+                float _pulse = Mathf.PingPong(Time.time * 2f, 1f); 
+                _forestTriggerRenderer.material.color = Color.Lerp(Color.white, Color.red, _pulse);
             }
         }
     }
 
     void OnTriggerExit(Collider other)
     {
-        Debug.Log("OnTriggerExit");
+        //Debug.Log("OnTriggerExit");
 
         if (other.CompareTag("Player"))
         {

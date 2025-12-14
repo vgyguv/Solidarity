@@ -3,7 +3,7 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     //[SerializeField]
-    private int _energy = 3000; // starting energy
+    private int _energy = 5000; // starting energy
     [SerializeField]
     private float _speed = 3.5f;
     private GameManager _gameManager;
@@ -22,6 +22,12 @@ public class Player : MonoBehaviour
     void Update()
     {
         CalculateMovement();
+    }
+
+    public int GetEnergyLevel()
+    {
+        //Debug.Log("Player.GetEnergyLevel()");
+        return _energy;
     }
 
     public void UpdateEnergyLevel(int amount)
@@ -52,16 +58,8 @@ public class Player : MonoBehaviour
         Vector3 direction = new Vector3(horizontalInput, verticalInput,0);
         transform.Translate(direction * _speed * Time.deltaTime);
 
-        // following statement fixes the y boundary - similar to the if statement below
+        // following statement fixes the y boundary - like the if statement below
         transform.position = new Vector3(transform.position.x, Mathf.Clamp(transform.position.y, -4, 6), 0f);        
-//        if (transform.position.y >= 6)
-//        {
-//            transform.position = new Vector3(transform.position.x, 6, 0);
-//        }
-//        else if (transform.position.y <= -4)
-//        {
-//            transform.position = new Vector3(transform.position.x, -4, 0);
-//        }
 
         if (transform.position.x >= 9)
         {

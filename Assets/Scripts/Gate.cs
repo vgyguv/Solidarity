@@ -59,8 +59,7 @@ public class Gate : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        Debug.Log("OnTriggerEnter");
-        //if (other.gameObject.name == "Enemy")
+        //Debug.Log("OnTriggerEnter");
         if (other.CompareTag("Enemy"))
         {
             if (!_isDestroyed)
@@ -170,7 +169,7 @@ public class Gate : MonoBehaviour
         
     void OnTriggerExit(Collider other)
     {
-        Debug.Log("OnTriggerExit");
+        //Debug.Log("OnTriggerExit");
         if (other.CompareTag("Enemy"))
         {
             Enemy enemy = other.gameObject.GetComponent<Enemy>();
@@ -189,7 +188,7 @@ public class Gate : MonoBehaviour
         
     void AlterSettlementState()
     {
-        Debug.Log("AlterSettlementState");
+        //Debug.Log("AlterSettlementState");
         Vector3 _position = _settlementCube.transform.position;
 
         _settlementRenderer.material.color = _activatedColor;

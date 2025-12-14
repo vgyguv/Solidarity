@@ -19,19 +19,19 @@ public class UIManager : MonoBehaviour
         _scoreText = GameObject.Find("ScoreText").GetComponent<TextMeshProUGUI>();
         _energyText = GameObject.Find("EnergyText").GetComponent<TextMeshProUGUI>();
         //_scoreText = GetComponent<TextMeshPro>();
-        if (_restartText == null)
-        {
-            Debug.Log("_restartText IS NULLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL");
-        }
+        //if (_restartText == null)
+        //{
+        //    Debug.Log("_restartText IS NULLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL");
+        //}
 
-        if (_energyText == null)
-        {
-            Debug.Log("_energyText IS NULL");
-        }
-        else
-        {
-            Debug.Log("_energyText IS NOT NULL");
-        }
+        //if (_energyText == null)
+        //{
+        //    Debug.Log("_energyText IS NULL");
+        //}
+        //else
+        //{
+        //    Debug.Log("_energyText IS NOT NULL");
+        //}
         _energyText.text = "Energy:" + 0;
     }
 

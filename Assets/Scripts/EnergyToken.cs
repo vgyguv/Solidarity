@@ -11,24 +11,23 @@ public class EnergyToken : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        Debug.Log("Energy::Start()");   
+        //Debug.Log("Energy::Start()");   
     }
 
     // Update is called once per frame
     void Update()
     {
-        Debug.Log("Energy::Update()");   
+        //Debug.Log("Energy::Update()");   
         // Rotate around the diagonal axis
         transform.Rotate(diagonalAxis, rotationSpeed * Time.deltaTime);        
     }
 
     void OnTriggerEnter(Collider other)
     {
-        Debug.Log("EnergyToken::OnTriggerEnter() ??????????????????????????????????????????????????????????" + other.gameObject.name);
+        //Debug.Log("EnergyToken::OnTriggerEnter() ??????????????????????????????????????????????????????????" + other.gameObject.name);
         
         if (other.CompareTag("Player"))
         {
-            Debug.Log("EnergyToken::OnTriggerEnter() - GOT PLAYER");
             Player _playerScript = other.GetComponent<Player>();
             _playerScript.UpdateEnergyLevel(_energyReward);            
             Destroy(gameObject);
